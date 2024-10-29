@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mohd Zubair" />
+    <meta name="keywords" content="blog, business card, creative, creative portfolio, cv theme, online resume, personal, portfolio, professional cv, responsive portfolio, resume, resume theme, vcard" />
+    <meta name="author" content="Mohd Zubair" />
+    <title>Mohd Zubair</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Raleway:300&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Monoton&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Poppins:500&display=swap');
+
+        /* CSS Styles */
+        html, body {
+            height: 100%; /* Make the body take the full height of the viewport */
+            display: flex; /* Use flexbox for layout */
+            flex-direction: column; /* Stack children vertically */
+            background-color: #000;
+            color: whitesmoke;
+            font-family: poppins, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative; /* Added for positioning of particles */
+        }
+
+        #particles {
+            position: absolute; /* Position absolute to cover full viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Send particles to the background */
+        }
+
+        .container {
+            flex: 1; /* Allow the container to grow and fill the available space */
+            width: 80%;
+            margin: auto;
+            color: whitesmoke;
+            background-color: #080808;
+            padding: 0px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            margin-top: 50px;
+            position: relative; /* Position relative to stack above particles */
+            z-index: 1; /* Bring content above the particles */
+        }
+
+        /* Title Section */
+        .title-section h1 {
+            font-size: 45px;
+            font-weight: 900;
+            color: #c70039;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Description Section */
+        .description-section {
+            font-size: 18px;
+            line-height: 1.5;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Video Section */
+        .video-section h2 {
+            color: #c70039;
+            font-size: 28px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .video-section iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Photos Section */
+        .photos-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .photos-section h2 {
+            color: #c70039;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .project-photo {
+            width: 250px; /* Set a fixed width */
+            height: 250px; /* Set a fixed height to make it square */
+            object-fit: cover; /* Ensures the image covers the square area without stretching */
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer; /* Pointer cursor for images */
+        }
+
+        /* Footer Section */
+        .footer {
+            background: #080808;
+            width: 100%;
+            padding: 20px;
+            color: whitesmoke;
+            display: flex;
+            flex-direction: row;
+            font-family: poppins;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer .footer-text {
+            position: relative;
+            display: inline;
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 1;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: hidden; /* Prevent overflow */
+            background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+        }
+
+        .modal-content {
+            position: relative; /* Position relative for positioning arrows */
+            margin: auto;
+            width: 67%; /* 67% of the screen */
+            height: auto; /* Adjust height automatically */
+            top: 50%;
+            transform: translateY(-50%); /* Center vertically */
+        }
+
+        .modal-image {
+            width: 100%; /* Responsive width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            color: white;
+            font-size: 40px;
+            padding: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            user-select: none; /* Prevent text selection */
+        }
+
+        .prev {
+            left: 10px; /* Position left */
+        }
+
+        .next {
+            right: 10px; /* Position right */
+        }
+
+        .prev:hover, .next:hover {
+            color: #c70039; /* Change color on hover */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title-section h1 {
+                font-size: 30px;
+            }
+            .video-section iframe {
+                height: 250px;
+            }
+            .project-photo {
+                width: 90%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Portfolio Content Container -->
+    <div class="container">
+        <!-- Title Section -->
+        <div class="title-section">
+            <h1>Project Title: AR Lab Directory</h1>
+        </div>
+
+        <!-- Description Section -->
+        <div class="description-section">
+            <p>
+                This Augmented Reality (AR) Lab Directory is designed to streamline the process of lab equipment access. 
+                By placing AR markers outside the lab, students can virtually explore available resources without physically entering the space. 
+                This not only saves time for lab personnel but also empowers students to independently research and select the tools they need for their projects. 
+                The directory's shareable link further facilitates knowledge dissemination and collaboration within the research community.
+            </p>
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-section">
+            <h2>Project Demonstration Video</h2>
+            <iframe src="https://www.youtube.com/embed/4sr4qADTpVs?si=CIIdYD5kz3xbA3zS" allowfullscreen></iframe>
+        </div>
+
+        <!-- Photos Section -->
+        <div class="photos-section">
+            <h2>Project Photos</h2>
+            <img src="images/AR 1.jpeg" alt="Project Photo 1" class="project-photo">
+            <img src="images/AR 2.jpeg" alt="Project Photo 2" class="project-photo">
+            <img src="images/AR 3.png" alt="Project Photo 3" class="project-photo">
+            <img src="images/AR 4.png" alt="Project Photo 4" class="project-photo">
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <a class="prev" id="prevBtn">&#10094;</a>
+            <a class="next" id="nextBtn">&#10095;</a>
+        </div>
+    </div>
+
+    <!-- Copyright Section -->
+    <div class="footer">
+        <div class="footer-text">
+            <img src="./images/copyright.png" alt="copyright-img" class="images" height="14px"> Copyright 2024. All Rights Reserved <br>
+            Designed in INDIA 🧡 Mohd Zubair
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/particles.min.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+        particlesJS.load('particles', 'js/particles.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
+
+        const images = document.querySelectorAll('.project-photo');
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const closeBtn = document.getElementsByClassName("close")[0];
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        let currentImageIndex = 0;
+
+        // Open modal on image click
+        images.forEach((image, index) => {
+            image.onclick = () => {
+                currentImageIndex = index; // Set current index
+                modal.style.display = "block"; // Show modal
+                modalImg.src = image.src; // Set modal image source
+            };
+        });
+
+        // Close modal
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+        };
+
+        // Navigate to previous image
+        prevBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : images.length - 1;
+            modalImg.src = images[currentImageIndex].src;
+        };
+
+        // Navigate to next image
+        nextBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex < images.length - 1) ? currentImageIndex + 1 : 0;
+            modalImg.src = images[currentImageIndex].src;
+        };
+
+        // Close modal when clicking outside of image
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>

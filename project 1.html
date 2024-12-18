@@ -97,10 +97,13 @@
         }
 
         .project-photo {
-            width: 25%;
+            width: 250px; /* Set a fixed width */
+            height: 250px; /* Set a fixed height to make it square */
+            object-fit: cover; /* Ensures the image covers the square area without stretching */
             margin: 10px;
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer; /* Pointer cursor for images */
         }
 
         /* Footer Section */
@@ -124,6 +127,113 @@
             opacity: 1;
         }
 
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: hidden; /* Prevent overflow */
+            background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+        }
+
+        .modal-content {
+            position: relative; /* Position relative for positioning arrows */
+            margin: auto;
+            width: 67%; /* 67% of the screen */
+            height: auto; /* Adjust height automatically */
+            top: 50%;
+            transform: translateY(-50%); /* Center vertically */
+        }
+
+        .modal-image {
+            width: 100%; /* Responsive width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            color: white;
+            font-size: 40px;
+            padding: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            user-select: none; /* Prevent text selection */
+        }
+
+        .prev {
+            left: 10px; /* Position left */
+        }
+
+        .next {
+            right: 10px; /* Position right */
+        }
+
+        .prev:hover, .next:hover {
+            color: #c70039; /* Change color on hover */
+        }
+
+        /* Back Navigation Styles */
+#back-navigation {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+}
+
+#back-navigation .navigation-close {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease; /* Zoom effect */
+    cursor: pointer; /* Makes it clear the X is clickable */
+}
+
+#back-navigation .navigation-close:hover {
+    transform: scale(1.2); /* Zoom in on hover */
+}
+
+#back-navigation .navigation-close .close-first,
+#back-navigation .navigation-close .close-second {
+    position: absolute;
+    background-color: #f6f6f6;
+    border-radius: 2px;
+    width: 100%; /* Matches the width of the .navigation-close */
+    height: 3px;
+    top: 50%; /* Center vertically */
+    left: 0;
+    transform-origin: center; /* Smooth rotation from the center */
+    transition: background-color 0.3s ease;
+}
+
+#back-navigation .navigation-close .close-first {
+    transform: translateY(-50%) rotate(45deg); /* Rotated to form "X" */
+}
+
+#back-navigation .navigation-close .close-second {
+    transform: translateY(-50%) rotate(-45deg); /* Rotated to form "X" */
+}
+
+#back-navigation .navigation-close:hover .close-first,
+#back-navigation .navigation-close:hover .close-second {
+    background-color: #f6f6f6; /* Change color on hover */
+}
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .title-section h1 {
@@ -140,6 +250,16 @@
     </style>
 </head>
 <body>
+
+<!-- Back Button Section -->
+<div id="back-navigation">
+    <a href="index.html" class="navigation-close">
+        <span class="close-first"></span>
+        <span class="close-second"></span>
+    </a>
+</div>
+
+
 
     <!-- Portfolio Content Container -->
     <div class="container">
@@ -174,6 +294,16 @@
         </div>
     </div>
 
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage" src="" alt="">
+            <a class="prev" id="prevBtn">&#10094;</a>
+            <a class="next" id="nextBtn">&#10095;</a>
+        </div>
+    </div>
+
     <!-- Copyright Section -->
     <div class="footer">
         <div class="footer-text">
@@ -189,7 +319,51 @@
     <script src="js/particles.min.js"></script>
     <script src="js/index.js"></script>
     <script>
-        particlesJS("particles", {"particles":{"number":{"value":40,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"shape":{"type":"circle","stroke":{"width":0,"color":"#000000"},"polygon":{"nb_sides":5},"image":{"src":"img/github.svg","width":100,"height":100}},"opacity":{"value":0.5,"random":false,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":3,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":6,"direction":"none","random":false,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"repulse"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":400,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":true});
+        particlesJS.load('particles', 'js/particles.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
+
+        const images = document.querySelectorAll('.project-photo');
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const closeBtn = document.getElementsByClassName("close")[0];
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        let currentImageIndex = 0;
+
+        // Open modal on image click
+        images.forEach((image, index) => {
+            image.onclick = () => {
+                currentImageIndex = index; // Set current index
+                modal.style.display = "block"; // Show modal
+                modalImg.src = image.src; // Set modal image source
+            };
+        });
+
+        // Close modal
+        closeBtn.onclick = () => {
+            modal.style.display = "none";
+        };
+
+        // Navigate to previous image
+        prevBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : images.length - 1;
+            modalImg.src = images[currentImageIndex].src;
+        };
+
+        // Navigate to next image
+        nextBtn.onclick = () => {
+            currentImageIndex = (currentImageIndex < images.length - 1) ? currentImageIndex + 1 : 0;
+            modalImg.src = images[currentImageIndex].src;
+        };
+
+        // Close modal when clicking outside of image
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
     </script>
+
 </body>
 </html>

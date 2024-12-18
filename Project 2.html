@@ -185,6 +185,152 @@
         .prev:hover, .next:hover {
             color: #c70039; /* Change color on hover */
         }
+        .navigation-links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family:poppins;
+}
+.navigation-links a{
+    padding:10px;
+    text-decoration: none;
+    color: white;
+    font-size: 30px;
+    opacity: .7;
+    transition: all .4s ease;
+}
+.navigation-links a:hover{
+    opacity: 1;
+}
+.navigation-links a::before{
+    content: "";
+    position: absolute;
+    top:50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    transform: translate(-50%,-50%);
+    align-items: center;
+    font-size: 5em;
+    font-weight: 400;
+    font-family: monoton;
+    color:rgb(255, 255, 255,.1);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    letter-spacing: 100px;
+    transition: all .4s ease;
+}
+.navigation-links a:hover::before{
+    content: attr(data-text);
+    opacity: 1;
+    letter-spacing: 10px;
+}
+#navigation-bar img{
+                height: 80px;
+                position: absolute;
+                top: 15%;
+                left: 2.5%;
+                opacity: .8;
+                transition: all .4s ease;
+                display: none;
+            }
+            #navigation-content{
+    height: 100vh;
+    width: 100%;
+    position:fixed;
+    z-index: 5;
+    background-color:#020202;
+    transform: translateY(-200%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#navigation-bar{
+    position: fixed;
+    height: 100px;
+    width: 100%;
+    z-index: 3;
+    padding: 10px;
+    background:transparent;
+    overflow: hidden;
+}
+.logo img{
+    height: 80px;
+    position: absolute;
+    top: 3%;
+    left: 2.5%;
+    opacity: .8;
+    z-index: 2;
+    cursor: pointer;
+    transition: all .4s ease;
+}
+.logo img:hover{
+    opacity: 1;
+    transform: rotate(-45deg);
+}
+.navigation-close{
+    position: absolute;
+    top: 6%;
+    right:4%;
+    padding: 10px;
+    cursor: pointer;
+    transition: all.3s ease;
+    opacity: .8;
+}
+.navigation-close:hover{
+    opacity: 1;
+    transform: rotate(90deg);
+}
+
+/* Back Navigation Styles */
+#back-navigation {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+}
+
+#back-navigation .navigation-close {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease; /* Zoom effect */
+    cursor: pointer; /* Makes it clear the X is clickable */
+}
+
+#back-navigation .navigation-close:hover {
+    transform: scale(1.2); /* Zoom in on hover */
+}
+
+#back-navigation .navigation-close .close-first,
+#back-navigation .navigation-close .close-second {
+    position: absolute;
+    background-color: #f6f6f6;
+    border-radius: 2px;
+    width: 60%; /* Matches the width of the .navigation-close */
+    height: 3px;
+    top: 50%; /* Center vertically */
+    left: 0;
+    transform-origin: center; /* Smooth rotation from the center */
+    transition: background-color 0.3s ease;
+}
+
+#back-navigation .navigation-close .close-first {
+    transform: translateY(-50%) rotate(45deg); /* Rotated to form "X" */
+}
+
+#back-navigation .navigation-close .close-second {
+    transform: translateY(-50%) rotate(-45deg); /* Rotated to form "X" */
+}
+
+#back-navigation .navigation-close:hover .close-first,
+#back-navigation .navigation-close:hover .close-second {
+    background-color: #f6f6f6; /* Change color on hover */
+}
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -202,6 +348,31 @@
     </style>
 </head>
 <body>
+
+    <!-- Back Button Section -->
+<div id="back-navigation">
+    <a href="index.html" class="navigation-close">
+        <span class="close-first"></span>
+        <span class="close-second"></span>
+    </a>
+</div>
+
+    <div id="navigation-content">
+        <div class="logo">
+            <img src="images/icon-email.png.png" alt="logo">
+        </div>
+        <div class="navigation-close">
+            <span class="close-first"></span>
+            <span class="close-second"></span>
+        </div>
+        <div class="navigation-links">
+            <a href="#" data-text="HOME" id="home-link" >HOME</a>
+            <a href="#" data-text="ABOUT" id="about-link" >ABOUT</a>
+            <a href="#" data-text="PORTFOLIO" id="portfolio-link" >PORTFOLIO</a>
+            <a href="#" data-text="CONTACT" id="contact-link" >CONTACT</a>
+            <a href="#" data-text="UPCOMING PROJECT" id="blog-link" >UPCOMING PROJECT</a>
+        </div>
+    </div>
 
     <!-- Portfolio Content Container -->
     <div class="container">

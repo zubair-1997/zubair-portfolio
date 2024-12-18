@@ -186,6 +186,53 @@
             color: #c70039; /* Change color on hover */
         }
 
+        /* Back Navigation Styles */
+#back-navigation {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+}
+
+#back-navigation .navigation-close {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease; /* Zoom effect */
+    cursor: pointer; /* Makes it clear the X is clickable */
+}
+
+#back-navigation .navigation-close:hover {
+    transform: scale(1.2); /* Zoom in on hover */
+}
+
+#back-navigation .navigation-close .close-first,
+#back-navigation .navigation-close .close-second {
+    position: absolute;
+    background-color: #f6f6f6;
+    border-radius: 2px;
+    width: 100%; /* Matches the width of the .navigation-close */
+    height: 3px;
+    top: 50%; /* Center vertically */
+    left: 0;
+    transform-origin: center; /* Smooth rotation from the center */
+    transition: background-color 0.3s ease;
+}
+
+#back-navigation .navigation-close .close-first {
+    transform: translateY(-50%) rotate(45deg); /* Rotated to form "X" */
+}
+
+#back-navigation .navigation-close .close-second {
+    transform: translateY(-50%) rotate(-45deg); /* Rotated to form "X" */
+}
+
+#back-navigation .navigation-close:hover .close-first,
+#back-navigation .navigation-close:hover .close-second {
+    background-color: #f6f6f6; /* Change color on hover */
+}
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .title-section h1 {
@@ -202,6 +249,14 @@
     </style>
 </head>
 <body>
+
+    <!-- Back Button Section -->
+<div id="back-navigation">
+    <a href="index.html" class="navigation-close">
+        <span class="close-first"></span>
+        <span class="close-second"></span>
+    </a>
+</div>
 
     <!-- Portfolio Content Container -->
     <div class="container">

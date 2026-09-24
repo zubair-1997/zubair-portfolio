@@ -18,7 +18,7 @@ html[data-theme="dark"] {
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: var(--header-offset, 90px); }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 18px; font-weight: 300; line-height: 1.55; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 22px; font-weight: 300; line-height: 1.55; }
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; }
 :focus-visible { outline: 3px solid var(--link); outline-offset: 4px; }
@@ -34,7 +34,7 @@ main > section[hidden] { display: none; }
 .home-page .header-inner { justify-content: flex-end; }
 .home-page.publications-view .header-inner { justify-content: space-between; }
 nav { display: flex; align-items: center; gap: 1.65rem; }
-nav a { color: var(--text); font-size: 1rem; }
+nav a { color: var(--text); font-size: 1.2rem; }
 nav a[aria-current="page"] { color: var(--link); }
 nav { flex-wrap: wrap; }
 .header-inner { padding-block: .6rem; }
@@ -49,8 +49,8 @@ h1, h2 { margin: 0; font-weight: 300; line-height: 1.12; }
 h1 { font-size: clamp(3.25rem, 5vw, 4.6rem); letter-spacing: -.04em; }
 h2 { font-size: clamp(2.15rem, 3.2vw, 3rem); letter-spacing: -.025em; }
 h3 { margin: 0; font-size: 1.15rem; line-height: 1.35; font-weight: 500; }
-.topics { margin: .8rem 0 1.7rem; font-size: 1.18rem; }
-.hello { font-size: 1.24rem; }
+.topics { margin: .8rem 0 1.7rem; font-size: 1.3rem; }
+.hello { font-size: 1.35rem; }
 .about-copy > p { max-width: 790px; }
 .research-topic { color: inherit; }
 blockquote { margin: 1.6rem 0 0; padding-left: 1rem; border-left: 3px solid var(--link); color: var(--muted); font-style: italic; }
@@ -325,7 +325,7 @@ footer p { margin: 0; }
   .project-grid, .teaching-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 620px) {
-  body { font-size: 16px; }
+  body { font-size: 18px; }
   .brand { display: none; }
   .home-page.publications-view .brand { display: none; }
   .header-inner { justify-content: center; min-height: 64px; }

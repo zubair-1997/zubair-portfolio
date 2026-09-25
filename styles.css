@@ -17,7 +17,12 @@ html[data-theme="dark"] {
   --shadow: 0 6px 20px #00000059;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: var(--header-offset, 90px); }
+html { scroll-behavior: auto; scroll-padding-top: var(--header-offset, 90px); }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-size: 22px; font-weight: 300; line-height: 1.55; }
 a { color: var(--link); text-decoration: none; }
 a:hover { text-decoration: underline; }

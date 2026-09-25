@@ -1,7 +1,52 @@
 const root = document.documentElement;
 const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-const scrollBehavior = () => motionPreference.matches ? "instant" : "smooth";
 const header = document.querySelector("header");
+let smoothScroller = null;
+let syncPageViewForHash = null;
+
+const getHeaderOffset = () => (header?.getBoundingClientRect().height || 0) + 16;
+const setupSmoothScroller = () => {
+  smoothScroller?.destroy();
+  smoothScroller = null;
+  if (motionPreference.matches || typeof Lenis !== "function") return;
+
+  smoothScroller = new Lenis({
+    autoRaf: true,
+    smoothWheel: true,
+    syncTouch: false,
+    lerp: 0.115,
+    wheelMultiplier: 0.9,
+    touchMultiplier: 1,
+    allowNestedScroll: true,
+    overscroll: true
+  });
+};
+
+const scrollToElement = (target, { block = "start", immediate = motionPreference.matches } = {}) => {
+  if (!target) return;
+  if (!smoothScroller) {
+    target.scrollIntoView({ behavior: "auto", block });
+    return;
+  }
+
+  if (block === "center") {
+    const targetTop = target.getBoundingClientRect().top + window.scrollY;
+    const centeredTop = targetTop - Math.max(0, (window.innerHeight - target.offsetHeight) / 2);
+    smoothScroller.scrollTo(centeredTop, { immediate });
+    return;
+  }
+
+  smoothScroller.scrollTo(target, { offset: -getHeaderOffset(), immediate });
+};
+
+const updatePageHash = (hash, { scroll = true } = {}) => {
+  if (window.location.hash !== hash) history.pushState(null, "", hash);
+  syncPageViewForHash?.({ scroll });
+};
+
+setupSmoothScroller();
+motionPreference.addEventListener("change", setupSmoothScroller);
+
 if (header && "ResizeObserver" in window) {
   new ResizeObserver(() => {
     root.style.setProperty("--header-offset", `${header.getBoundingClientRect().height + 16}px`);
@@ -9,7 +54,8 @@ if (header && "ResizeObserver" in window) {
 }
 const projectView = document.querySelector("main > #projects");
 if (projectView) {
-  const syncPageView = () => {
+  let initialViewSync = true;
+  const syncPageView = ({ scroll = true } = {}) => {
     const target = document.getElementById(window.location.hash.slice(1));
     const projectsActive = target === projectView || Boolean(target && projectView.contains(target));
     const publicationsActive = Boolean(target?.closest("#publications"));
@@ -29,13 +75,25 @@ if (projectView) {
     if (skip) skip.href = projectsActive ? "#projects" : "#about";
     requestAnimationFrame(() => {
       const target = document.getElementById(window.location.hash.slice(1));
-      if (target) target.scrollIntoView({ behavior: "instant", block: "start" });
+      if (scroll && target) scrollToElement(target, { immediate: initialViewSync || motionPreference.matches });
+      initialViewSync = false;
       window.dispatchEvent(new Event("resize"));
     });
   };
+  syncPageViewForHash = syncPageView;
   window.addEventListener("hashchange", syncPageView);
   syncPageView();
 }
+
+document.addEventListener("click", event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a[href^="#"]');
+  if (!link || link.classList.contains("skip")) return;
+  const hash = link.getAttribute("href");
+  if (!hash || hash === "#" || !document.getElementById(hash.slice(1))) return;
+  event.preventDefault();
+  updatePageHash(hash);
+});
 const toggle = document.querySelector("#theme");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 const key = "mohd-zubair-theme";
@@ -338,7 +396,7 @@ if (mapTrigger && papers.length) {
       link.addEventListener("click", () => {
         mapDialog.close();
         document.querySelector(`.filter[data-filter="${topic}"]`).click();
-        paper.scrollIntoView({ behavior: scrollBehavior(), block: "center" });
+        scrollToElement(paper, { block: "center" });
         paper.tabIndex = -1;
         paper.focus({ preventScroll: true });
       });
@@ -382,10 +440,10 @@ if (connectionTriggers.length) {
   const goTo = (target, section) => {
     dialog.close();
     if (section === "publications") document.querySelector('.filter[data-filter="all"]')?.click();
-    window.location.hash = section;
+    updatePageHash(`#${section}`, { scroll: false });
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (section === "publications") target.tabIndex = -1;
-      target.scrollIntoView({ behavior: scrollBehavior(), block: "center" });
+      scrollToElement(target, { block: "center" });
       target.focus({ preventScroll: true });
     }));
   };

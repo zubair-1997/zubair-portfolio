@@ -67,7 +67,7 @@ blockquote { margin: 1.6rem 0 0; padding-left: 1rem; border-left: 3px solid var(
 .lens-button:hover { transform: translateY(-1px); }
 .lens-copy { min-height: 3.1em; margin: .75rem 0 0; }
 .profile { text-align: center; perspective: 900px; }
-.profile img { width: min(100%, 305px); aspect-ratio: 1; object-fit: cover; object-position: center 22%; border-radius: 50%; box-shadow: 18px 20px 26px #00000020, 0 4px 10px #00000018; transform: rotateX(2deg) rotateY(-5deg); transition: transform 360ms cubic-bezier(.2, .7, .2, 1), box-shadow 360ms ease; }
+.profile img { width: min(100%, 305px); aspect-ratio: 1; object-fit: cover; object-position: center 22%; border-radius: 50%; box-shadow: 18px 20px 26px #00000020, 0 4px 10px #00000018; transform: rotateX(2deg) rotateY(-5deg); transition: transform 650ms cubic-bezier(.22, .61, .36, 1), box-shadow 650ms ease; }
 .profile:hover img { box-shadow: 24px 26px 34px #00000028, 0 5px 12px #0000001a; transform: rotateX(0) rotateY(0) translateY(-4px); }
 .profile > p { margin: 1.15rem 0 .8rem; font-family: Consolas, monospace; font-size: .92rem; font-weight: 500; }
 .profile-links { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: .8rem; }
@@ -186,7 +186,7 @@ blockquote { margin: 1.6rem 0 0; padding-left: 1rem; border-left: 3px solid var(
 .paper-list { display: grid; gap: 2.6rem; }
 .paper { display: grid; grid-template-columns: 205px minmax(0, 1fr); gap: 2rem; align-items: center; perspective: 900px; transition: opacity 180ms, transform 180ms; }
 .paper[hidden] { display: none; }
-.cover { width: 205px; height: 135px; display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; border-radius: 6px; box-shadow: 11px 14px 20px #00000025; color: #fff; overflow: hidden; position: relative; transform: rotateX(2deg) rotateY(-5deg); transition: transform 360ms cubic-bezier(.2, .7, .2, 1), box-shadow 360ms ease; }
+.cover { width: 205px; height: 135px; display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; border-radius: 6px; box-shadow: 11px 14px 20px #00000025; color: #fff; overflow: hidden; position: relative; transform: rotateX(2deg) rotateY(-5deg); transition: transform 650ms cubic-bezier(.22, .61, .36, 1), box-shadow 650ms ease; }
 .paper:hover .cover { box-shadow: 17px 20px 27px #00000030; transform: rotateX(0) rotateY(0) translateY(-3px); }
 .paper .cover { cursor: zoom-in; }
 .image-preview { width: min(900px, calc(100% - 2rem)); max-height: calc(100% - 2rem); padding: 1rem; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); box-shadow: var(--shadow); }

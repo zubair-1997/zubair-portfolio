@@ -124,6 +124,25 @@ document.addEventListener("click", event => {
   );
 });
 
+document.addEventListener("pointermove", event => {
+  if (event.pointerType !== "mouse" || motionPreference.matches || !(event.target instanceof Element)) return;
+  const card = event.target.closest(".projects-main .project-card");
+  if (!card) return;
+
+  const bounds = card.getBoundingClientRect();
+  const horizontalPosition = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
+  const verticalPosition = Math.min(1, Math.max(0, (event.clientY - bounds.top) / bounds.height));
+  card.style.setProperty("--card-tilt-x", `${(0.5 - verticalPosition) * 8}deg`);
+  card.style.setProperty("--card-tilt-y", `${(horizontalPosition - 0.5) * 10}deg`);
+});
+document.addEventListener("pointerout", event => {
+  if (event.pointerType !== "mouse" || !(event.target instanceof Element)) return;
+  const card = event.target.closest(".projects-main .project-card");
+  if (!card || card.contains(event.relatedTarget)) return;
+  card.style.removeProperty("--card-tilt-x");
+  card.style.removeProperty("--card-tilt-y");
+});
+
 const toggle = document.querySelector("#theme");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 const key = "mohd-zubair-theme";

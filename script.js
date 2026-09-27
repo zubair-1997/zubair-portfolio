@@ -20,6 +20,7 @@ const setupSmoothScroller = () => {
     allowNestedScroll: true,
     overscroll: true
   });
+  if (document.querySelector("dialog[open]")) smoothScroller.stop();
 };
 
 const scrollToElement = (target, { block = "start", immediate = motionPreference.matches } = {}) => {
@@ -39,13 +40,28 @@ const scrollToElement = (target, { block = "start", immediate = motionPreference
   smoothScroller.scrollTo(target, { offset: -getHeaderOffset(), immediate });
 };
 
-const updatePageHash = (hash, { scroll = true } = {}) => {
-  if (window.location.hash !== hash) history.pushState(null, "", hash);
+const getPageSection = () => {
+  const path = window.location.pathname.replace(/\/+$/, "") || "/";
+  const route = path === "/about" || path === "/publications" || path === "/projects" ? path.slice(1) : "";
+  return route || new URLSearchParams(window.location.search).get("section") || window.location.hash.slice(1) || "about";
+};
+const sectionUrl = section => window.location.protocol === "file:" ? `?section=${encodeURIComponent(section)}` : `/${section}`;
+const updatePageSection = (section, { scroll = true } = {}) => {
+  const nextUrl = sectionUrl(section);
+  const currentUrl = window.location.protocol === "file:" ? window.location.search : window.location.pathname;
+  if (currentUrl !== nextUrl && currentUrl !== `?section=${encodeURIComponent(section)}` || window.location.hash) history.pushState(null, "", nextUrl);
   syncPageViewForHash?.({ scroll });
 };
 
 setupSmoothScroller();
 motionPreference.addEventListener("change", setupSmoothScroller);
+
+// Keep page inertia out of native dialogs, including nested image viewers.
+new MutationObserver(() => {
+  if (!smoothScroller) return;
+  if (document.querySelector("dialog[open]")) smoothScroller.stop();
+  else smoothScroller.start();
+}).observe(document.body, { subtree: true, attributes: true, attributeFilter: ["open"] });
 
 if (header && "ResizeObserver" in window) {
   new ResizeObserver(() => {
@@ -56,44 +72,58 @@ const projectView = document.querySelector("main > #projects");
 if (projectView) {
   let initialViewSync = true;
   const syncPageView = ({ scroll = true } = {}) => {
-    const target = document.getElementById(window.location.hash.slice(1));
-    const projectsActive = target === projectView || Boolean(target && projectView.contains(target));
-    const publicationsActive = Boolean(target?.closest("#publications"));
+    const section = getPageSection();
+    const target = document.getElementById(section);
+    const projectsActive = section === "projects";
+    const publicationsActive = section === "publications";
     document.querySelectorAll("main > section").forEach(section => {
       section.hidden = projectsActive && section !== projectView;
     });
     document.body.classList.toggle("home-page", !projectsActive);
     document.body.classList.toggle("projects-page", projectsActive);
+    projectView.querySelector(".project-grid")?.setAttribute("aria-label", projectsActive ? "All projects" : "Projects; scroll horizontally to see more");
     document.body.classList.toggle("publications-view", publicationsActive);
-    const activeHref = projectsActive ? "#projects" : publicationsActive ? "#publications" : "#about";
-    document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+    const activeHref = sectionUrl(projectsActive ? "projects" : publicationsActive ? "publications" : "about");
+    document.querySelectorAll("nav a[data-section]").forEach(link => {
       if (link.getAttribute("href") === activeHref) link.setAttribute("aria-current", "page");
       else link.removeAttribute("aria-current");
     });
     document.title = projectsActive ? "Projects | Mohd Zubair" : "Mohd Zubair | XR, CAD & Tangible Interfaces";
     const skip = document.querySelector(".skip");
-    if (skip) skip.href = projectsActive ? "#projects" : "#about";
+    if (skip) skip.href = sectionUrl(projectsActive ? "projects" : "about");
     requestAnimationFrame(() => {
-      const target = document.getElementById(window.location.hash.slice(1));
       if (scroll && target) scrollToElement(target, { immediate: initialViewSync || motionPreference.matches });
       initialViewSync = false;
       window.dispatchEvent(new Event("resize"));
     });
   };
   syncPageViewForHash = syncPageView;
-  window.addEventListener("hashchange", syncPageView);
+  window.addEventListener("popstate", () => syncPageView());
+  window.addEventListener("hashchange", () => syncPageView());
   syncPageView();
 }
 
 document.addEventListener("click", event => {
   if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  const link = event.target.closest('a[href^="#"]');
-  if (!link || link.classList.contains("skip")) return;
-  const hash = link.getAttribute("href");
-  if (!hash || hash === "#" || !document.getElementById(hash.slice(1))) return;
+  const link = event.target.closest("a[data-section]");
+  if (!link) return;
+  const section = link.dataset.section;
+  if (!section || !document.getElementById(section)) return;
   event.preventDefault();
-  updatePageHash(hash);
+  updatePageSection(section);
 });
+
+document.addEventListener("click", event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || motionPreference.matches) return;
+  if (!(event.target instanceof Element)) return;
+  const target = event.target.closest(".project-card, .paper .cover, .gallery-grid img, .project-details-gallery button");
+  if (!target || typeof target.animate !== "function") return;
+  target.animate(
+    [{ scale: "1" }, { scale: "1.04", offset: 0.48 }, { scale: "1" }],
+    { duration: 700, easing: "cubic-bezier(.2, .7, .2, 1)" }
+  );
+});
+
 const toggle = document.querySelector("#theme");
 const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
 const key = "mohd-zubair-theme";
@@ -440,7 +470,7 @@ if (connectionTriggers.length) {
   const goTo = (target, section) => {
     dialog.close();
     if (section === "publications") document.querySelector('.filter[data-filter="all"]')?.click();
-    updatePageHash(`#${section}`, { scroll: false });
+    updatePageSection(section, { scroll: false });
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (section === "publications") target.tabIndex = -1;
       scrollToElement(target, { block: "center" });
